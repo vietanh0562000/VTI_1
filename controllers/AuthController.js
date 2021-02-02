@@ -1,12 +1,13 @@
 /**
  * External Module
  */
-const {validationResult} = require('express-validator');
+const { validationResult } = require('express-validator');
 /**
  * Internal Module
  */
 const jwtHelper = require("../helpers/jwt.helper");
 const usersData = require('../models/user');
+const db = require('../data/connect');
 // Ds token
 let tokenList = {};
 
@@ -17,31 +18,38 @@ const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret-VanhDV";
 
 
-let login = async (req, res) =>{
-    try{
-        const users = usersData.getUsers();
+let login = (req, res) => {
+    try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(404).json({ message: errors.array() });
         }
-       
+
         let userToFind = req.body;
-        let user = users.find(function (currentUser) {
-            return (userToFind.username === currentUser.username && userToFind.password === currentUser.password);
+        console.log("get users");
+        db.query('SELECT * FROM users', (err, results) => {
+            if (err) {
+                throw err;
+            }
+            let users = results.rows;
+            users.forEach(async currentUser => {
+                console.log(currentUser);
+                if (userToFind.username === currentUser.username && userToFind.password === currentUser.password) {
+
+                    const accessToken = await jwtHelper.generateToken(currentUser, accessTokenSecret, accessTokenLife);
+                    console.log(accessToken);
+                    return res.status(200).json({ accessToken });
+                }
+               
+            })
+            
         });
+
+
         
-        if (user){
-           
-            const accessToken = await jwtHelper.generateToken(user, accessTokenSecret, accessTokenLife);
-            console.log(accessToken);
-            
-            
-            return res.status(200).json({accessToken});
-        }
-        else res.redirect('/');
-        
-    } catch(error){
-        return res.json({message: "Un authorized"});
+
+    } catch (error) {
+        return res.json({ message: "Un authorized" });
     }
 }
 

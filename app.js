@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const { encode } = require('querystring');
 const { body, validationResult } = require('express-validator');
+const user = require('./models/user');
 /**
  * Internal Modules
  */
@@ -21,8 +22,7 @@ let news = [];
 /**
  * App Configuration
  */
-app.set('views', './views');
-app.set('view engine', 'pug');
+
 /**
  * Get Data
  */
@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 app.get('/', function (req, res) {
     res.render('login', { title: "Log in" });
 });
-
+app.get('/users', user.getUsers);
 
 app.post('/login',
     body('username').isLength({ min: 4 }),
@@ -60,14 +60,19 @@ app.use(authMiddleware.isAuth);
 app.get('/news', function (req, res) {
     res.json(news);
 });
-app.post('/news/find', function (req, res) {
-    let order = req.body;
+app.get('/news/find', function (req, res) {
+    let order = {
+        title : req.query.title,
+        author : req.query.author,
+        description : req.query.description
+    };
+    
     const result = news.filter(function (currentNews) {
         let isSuccess = true;
         for (let key in order) {
 
-            console.log(currentNews[key]);
-            if (!currentNews[key].toLowerCase().includes(order[key].toLowerCase())) isSuccess = false;
+            if (order[key])
+                if (!currentNews[key].toLowerCase().includes(order[key].toLowerCase())) isSuccess = false;
         }
         return isSuccess;
     });

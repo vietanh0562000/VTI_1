@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-function getUsers(){
-    const data = fs.readFileSync(path.join(process.cwd(), 'data', 'users.json'), encoding = 'utf8');
-    return JSON.parse(data);
+
+function getUsers(req, res) {
+    
 }
+
 module.exports = {
-    getUsers: getUsers,
+    getUsers : getUsers,
 }
