@@ -1,18 +1,10 @@
 const fs = require('fs');
+const path = require('path');
 
-let users = [];
-function getUsers() {
-    fs.readFileSync("D:/VTI/firstApp/data/users.json", encoding = 'utf8', function (err, data) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        users = JSON.parse(data);
-        //console.log(users);
-    });
-    return users;
+function getUsers(){
+    const data = fs.readFileSync(path.join(process.cwd(), 'data', 'users.json'), encoding = 'utf8');
+    return JSON.parse(data);
 }
-
 module.exports = {
     getUsers: getUsers,
 }
