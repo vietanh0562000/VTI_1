@@ -54,5 +54,5 @@ let login = async (req, res) => {
 }
 
 module.exports = {
-    login: login,
+    login,
 }
