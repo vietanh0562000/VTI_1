@@ -12,8 +12,9 @@ async function register(req, res) {
         let username = req.body.username;
         let password = req.body.password;
         let phone = req.body.phone;
-
-        await db.query(`INSERT INTO users VALUES ('${id}', '${username}', '${password}', '${phone}')`, (err, result) => {
+        let query = 'INSERT INTO users VALUES($1, $2, $3, $4)';
+        let values = [id, username, password, phone];
+        await db.query(query,values, (err, result) => {
             if (err) {
                 throw err;
             }
@@ -25,5 +26,5 @@ async function register(req, res) {
 }
 
 module.exports = {
-    register: register
+    register
 }

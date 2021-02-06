@@ -20,7 +20,6 @@ async function findNews(req, res){
         let title = req.query.title || "";
         let author = req.query.author || "";
         let description = req.query.description || "";
-     
         await db.query(`SELECT * FROM news WHERE title LIKE '%${title}%' AND author LIKE '%${author}%' AND description LIKE '%${description}%'`, (err, results)=>{
             if (err){
                 throw err;
@@ -85,9 +84,9 @@ async function deleteNews(req, res){
     }
 }
 module.exports = {
-    getNews: getNews,
-    findNews: findNews,
-    addNews: addNews, 
-    updateNews: updateNews,
-    deleteNews: deleteNews,
+    getNews,
+    findNews,
+    addNews, 
+    updateNews,
+    deleteNews,
 }

@@ -34,6 +34,6 @@ let verifyToken = (token, secretKey) =>{
 }
 
 module.exports = {
-    generateToken: generateToken,
-    verifyToken: verifyToken,
+    generateToken,
+    verifyToken,
 }
