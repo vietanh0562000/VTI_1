@@ -18,7 +18,7 @@ const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret-VanhDV";
 
 
-let login = (req, res) => {
+let login = async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -27,7 +27,7 @@ let login = (req, res) => {
 
         let userToFind = req.body;
         console.log("get users");
-        db.query('SELECT * FROM users', (err, results) => {
+        await db.query('SELECT * FROM users', (err, results) => {
             if (err) {
                 throw err;
             }

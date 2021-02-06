@@ -12,13 +12,14 @@ const user = require('./models/user');
  */
 const authMiddleware = require('./middlewares/AuthMiddleware');
 const authController = require('./controllers/AuthController');
-
+const newsController = require('./controllers/NewsController');
+const userController = require('./controllers/UserController');
 /**
  * App Variables
  */
 const app = express();
 const port = process.env.PORT || "8080";
-let news = [];
+
 /**
  * App Configuration
  */
@@ -27,14 +28,7 @@ let news = [];
  * Get Data
  */
 
-fs.readFile('./data/news.json', encoding = 'utf8', function (err, data) {
-    if (err) {
-        console.log(err);
-        return;
-    }
-    news = JSON.parse(data);
-    console.log(news);
-})
+
 /**
  * Middleware
  */
@@ -55,57 +49,30 @@ app.post('/login',
     function(req, res){
         authController.login(req, res);
     });
+app.post('/register',
+    body('username').isLength({ min: 4 }),
+    body('password').isLength({ min: 4}),
+    body('phone').isMobilePhone(),
+    function(req, res){
+        userController.register(req, res);
+    });
 
 app.use(authMiddleware.isAuth);
 app.get('/news', function (req, res) {
-    res.json(news);
+    newsController.getNews(req, res);
 });
 app.get('/news/find', function (req, res) {
-    let order = {
-        title : req.query.title,
-        author : req.query.author,
-        description : req.query.description
-    };
-    
-    const result = news.filter(function (currentNews) {
-        let isSuccess = true;
-        for (let key in order) {
-
-            if (order[key])
-                if (!currentNews[key].toLowerCase().includes(order[key].toLowerCase())) isSuccess = false;
-        }
-        return isSuccess;
-    });
-    res.json(result);
+    newsController.findNews(req, res);
 });
-app.post('/news/add', function (req, res) {
-    let newNews = req.body;
-    newNews["id"] = "" + (news.length + 1);
-    news.push(newNews);
-    res.json({ message: "Add news success" });
-});
-app.post('/news/update/:id', function (req, res) {
-    let id = req.params.id;
-    let newData = req.body;
-    for (let currentNews of news) {
-        if (currentNews["id"] == id) {
-            for (let key in newData) {
-                currentNews[key] = newData[key];
-            }
-        }
-    }
-    res.json({ message: "Update success" });
-});
-app.delete('/news/delete/:id', function (req, res) {
-    let id = req.params.id;
-    for (let i = 0; i < news.length; i++) {
-        if (news[i]["id"] == id) {
-            news.splice(i, 1);
-            res.json({ message: 'Delete success' });
-            return;
-        }
-    }
-});
+app.post('/news/add', function(req, res){
+    newsController.addNews(req, res);
+})
+app.post('/news/update/:id', function(req, res){
+    newsController.updateNews(req, res);
+})
+app.delete('/news/delete/:id', function(req, res){
+    newsController.deleteNews(req, res);
+})
 /**
  * Server activate
  */
