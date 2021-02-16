@@ -12,7 +12,7 @@ let generateToken = (user, secretSignature, tokenLife) =>{
         jwt.sign(
             {data: userData}, 
             secretSignature, 
-            {algorithm: "HS256", expiresIn: tokenLife},
+            {algorithm: 'HS256', expiresIn: tokenLife},
             (error, token) =>{
                 if (error){
                     return reject(error);

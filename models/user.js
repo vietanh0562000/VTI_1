@@ -1,11 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+// const { Sequelize } = require('sequelize/types');
+// const sequelize = require('../data/connect');
 
+// const User = sequelize.define('User', {
+//    id: Sequelize.STRING,
+//    username: Sequelize.STRING,
+//    password: Sequelize.STRING,
+//    phone: Sequelize.STRING,
+// })
 
-function getUsers(req, res) {
-    
-}
-
-module.exports = {
-   getUsers,
-}
+// module.exports = User;

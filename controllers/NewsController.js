@@ -17,9 +17,9 @@ async function getNews(req, res) {
 async function findNews(req, res){
     try{
         console.log('find News');
-        let title = req.query.title || "";
-        let author = req.query.author || "";
-        let description = req.query.description || "";
+        let title = req.query.title || '';
+        let author = req.query.author || '';
+        let description = req.query.description || '';
         await db.query(`SELECT * FROM news WHERE title LIKE '%${title}%' AND author LIKE '%${author}%' AND description LIKE '%${description}%'`, (err, results)=>{
             if (err){
                 throw err;

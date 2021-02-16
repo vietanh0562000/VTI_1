@@ -5,17 +5,17 @@ const { validationResult } = require('express-validator');
 /**
  * Internal Module
  */
-const jwtHelper = require("../helpers/jwt.helper");
+const jwtHelper = require('../helpers/jwt.helper');
 const usersData = require('../models/user');
 const db = require('../data/connect');
 // Ds token
 let tokenList = {};
 
 // Thoi gian cua token
-const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || "1d";
+const accessTokenLife = process.env.ACCESS_TOKEN_LIFE || '1d';
 
 // secretKey
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || "access-token-secret-VanhDV";
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || 'access-token-secret-VanhDV';
 
 
 let login = async (req, res) => {
@@ -26,7 +26,7 @@ let login = async (req, res) => {
         }
 
         let userToFind = req.body;
-        console.log("get users");
+        console.log('get users');
         await db.query('SELECT * FROM users', (err, results) => {
             if (err) {
                 throw err;
@@ -49,7 +49,7 @@ let login = async (req, res) => {
         
 
     } catch (error) {
-        return res.json({ message: "Un authorized" });
+        return res.json({ message: 'Un authorized' });
     }
 }
 
